@@ -38,9 +38,4 @@ public class FastA_Huiting_Xu_Alessa_Straub {
     public static record Pair(String header, String sequence) {
     }
 
-    public static void main(String[] args) throws IOException {
-        ArrayList<FastA_Huiting_Xu_Alessa_Straub.Pair> lst = read("src/dna.fasta");
-        write(lst, null);
-
-    }
 }
