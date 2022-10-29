@@ -11,7 +11,7 @@ import java.util.Map;
 public class Translate_Huiting_Xu_Alessa_Straub {
     public static void main(String[] args) throws IOException {
         if (args.length < 1 || args.length > 2)
-            throw new IOException("Usage: Translate_YOUR_NAME infile [outFile]");
+            throw new IOException("Usage: Translate_Huiting_Xu_Alessa_Straub infile [outFile]");
 
         // todo: read in FastA pairs
         var list = FastA_Huiting_Xu_Alessa_Straub.read(args[0]);

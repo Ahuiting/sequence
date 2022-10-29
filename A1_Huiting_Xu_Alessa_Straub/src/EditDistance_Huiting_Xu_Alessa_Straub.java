@@ -13,7 +13,7 @@ public class EditDistance_Huiting_Xu_Alessa_Straub {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 1 || args.length > 2)
-            throw new IOException("Usage: EditDistance_YOUR_NAME infile [outFile]");
+            throw new IOException("Usage: EditDistance_Huiting_Xu_Alessa_Straub infile [outFile]");
 
         // todo: implement input of FastA records
         ArrayList<FastA_Huiting_Xu_Alessa_Straub.Pair> input = FastA_Huiting_Xu_Alessa_Straub.read(args[0]);
