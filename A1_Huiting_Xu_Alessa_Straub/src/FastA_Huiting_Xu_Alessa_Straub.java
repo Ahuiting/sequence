@@ -21,12 +21,21 @@ public class FastA_Huiting_Xu_Alessa_Straub {
     public static ArrayList<Pair> read(String fileName) throws IOException {
         var list = new ArrayList<Pair>();
         try (var r = new BufferedReader(new FileReader(fileName))) {
-            String header;
-            while ((header = r.readLine()) != null) {
-                if (header.startsWith(">")) {
-                    String seq = r.readLine().replace(" ", "");
-                    list.add(new Pair(header, seq));
+            String header = "", seq = "";
+            String line;
+            while ((line = r.readLine()) != null) {
+                if (line.startsWith(">")) {
+                    if (!seq.equals("")) {
+                        list.add(new Pair(header, seq));
+                    }
+                    header = line;
+                    seq = "";
+                } else {
+                    seq += line.replace(" ", "");
                 }
+            }
+            if (!header.equals("")) {
+                list.add(new Pair(header, seq));
             }
         }
         return list;
