@@ -1,0 +1,28 @@
+import A1_Huiting_Xu_Alessa_Straub.FastA_Huiting_Xu_Alessa_Straub;
+import A1_Huiting_Xu_Alessa_Straub.FastA_Huiting_Xu_Alessa_Straub.Pair;
+
+how to run it:
+normal Needleman:
+
+First try:
+javac A1_Huiting_Xu_Alessa_Straub/FastA_Huiting_Xu_Alessa_Straub.java
+short.fasta:
+Try: java GlobalAligner_Huiting_Xu_Alessa_Straub.java data-02/short.fasta
+medium.fasta:
+Try: java GlobalAligner_Huiting_Xu_Alessa_Straub.java data-02/medium.fasta
+long.fasta:
+Try: java GlobalAligner_Huiting_Xu_Alessa_Straub.java data-02/long.fasta
+
+Needleman with linear space:
+
+short.fasta:
+Try: java GlobalAligner_Huiting_Xu_Alessa_Straub.java data-02/short.fasta linearSpace
+medium.fasta:
+Try: java GlobalAligner_Huiting_Xu_Alessa_Straub.java data-02/medium.fasta linearSpace
+long.fasta:
+Try: java GlobalAligner_Huiting_Xu_Alessa_Straub.java data-02/long.fasta linearSpace
+
+
+Needleman with no DP
+short.fasta:
+Try: java GlobalAligner_Huiting_Xu_Alessa_Straub.java data-02/short.fasta noDP
