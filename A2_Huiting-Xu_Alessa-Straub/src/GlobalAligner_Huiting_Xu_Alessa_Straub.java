@@ -39,7 +39,8 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
         // todo: implement, Assignment 2.1
         long start = System.currentTimeMillis();
         String[] result = nw(x, y);
-        System.out.println("score: " + result[0] + "\n" + result[1] + "\n" + result[2]);
+        System.out.println("score: " + result[0]);
+        printAlignment(result[1], result[2]);
         long end = System.currentTimeMillis();
         System.out.println("runtime: " + (end - start) + "ms");
     }
@@ -98,7 +99,7 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
         // todo: implement, Assignment 2.2
         long start = System.currentTimeMillis();
         String[] alignments = linearspace(x, y, true);
-        System.out.println(alignments[0] + "\n" + alignments[1]);
+        printAlignment(alignments[0], alignments[1]);
         long end = System.currentTimeMillis();
         System.out.println("runtime: " + (end - start) + "ms");
     }
@@ -210,8 +211,23 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
             return Math.max(computeF(i - 1, j - 1, x, y) + (x.charAt(i - 1) == y.charAt(j - 1) ? match : mismatch),
                     Math.max(computeF(i - 1, j, x, y) - gap, computeF(i, j - 1, x, y) - gap));
         }
-
     }
 
+    static void printAlignment(String x, String y) {
+        int length = 60, turns;
+        turns = x.length() / length + ((x.length() % length == 0) ? 0 : 1);
+        for (int i = 0; i < turns; i++) {
+            if (x.length() >= (i + 1) * length) {
+                System.out.println("sequence1: " + x.substring(i * 60, (i + 1) * 60));
+                System.out.println("sequence2: " + y.substring(i * 60, (i + 1) * 60));
+                System.out.println();
+            } else {
+                System.out.println("sequence1: " + x.substring(i * 60));
+                System.out.println("sequence2: " + y.substring(i * 60));
+                System.out.println();
+            }
+        }
+
+    }
 
 }
