@@ -35,9 +35,16 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
      * @param x
      * @param y
      */
-    public static String[] runNeedlemanWunschQuadraticSpace(Pair x, Pair y) {
+    public static void runNeedlemanWunschQuadraticSpace(Pair x, Pair y) {
         // todo: implement, Assignment 2.1
         long start = System.currentTimeMillis();
+        String[] result = nw(x, y);
+        System.out.println("score: " + result[0] + "\n" + result[1] + "\n" + result[2]);
+        long end = System.currentTimeMillis();
+        System.out.println("runtime: " + (end - start) + "ms");
+    }
+
+    static String[] nw(Pair x, Pair y) {
         int n = x.sequence().length();
         int m = y.sequence().length();
         int match = 1, mismatch = -1, gap = 1;
@@ -53,9 +60,9 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
         for (int i = 1; i < n + 1; i++) {
             for (int j = 1; j < m + 1; j++) {
                 int diagScore = scoreMatrix[i - 1][j - 1] + (x.sequence().charAt(i - 1) == y.sequence().charAt(j - 1) ? match : mismatch);
-                int leftScore = scoreMatrix[i - 1][j] - gap;
-                int aboveScore = scoreMatrix[i][j - 1] - gap;
-                int maxScore = Math.max(Math.max(diagScore, leftScore), aboveScore);
+                int aboveScore = scoreMatrix[i - 1][j] - gap;
+                int leftScore = scoreMatrix[i][j - 1] - gap;
+                int maxScore = Math.max(Math.max(diagScore, aboveScore), leftScore);
                 scoreMatrix[i][j] = maxScore;
             }
         }
@@ -74,11 +81,7 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
                 alignment1.append("-");
                 alignment2.append(y.sequence().charAt(--j));
             }
-        System.out.println("score: " + scoreMatrix[n][m] + "\n" + alignment1.reverse() + "\n" + alignment2.reverse());
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
-
-        return new String[]{alignment1.toString(), alignment2.toString()};
+        return new String[]{String.valueOf(scoreMatrix[n][m]), alignment1.reverse().toString(), alignment2.reverse().toString()};
     }
 
 
@@ -93,13 +96,14 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
      */
     public static void runNeedlemanWunschLinearSpace(Pair x, Pair y) {
         // todo: implement, Assignment 2.2
-
-        System.out.println(linearspace(x, y));
-
+        long start = System.currentTimeMillis();
+        String[] alignments = linearspace(x, y, true);
+        System.out.println(alignments[0] + "\n" + alignments[1]);
+        long end = System.currentTimeMillis();
+        System.out.println("runtime: " + (end - start) + "ms");
     }
 
-    static String[] linearspace(Pair x, Pair y) {
-        long start = System.currentTimeMillis();
+    static String[] linearspace(Pair x, Pair y, boolean first) {
         int match = 1, mismatch = -1, gap = 1;
         int n = x.sequence().length();
         int m = y.sequence().length();
@@ -115,56 +119,62 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
                 alignment1.append(x.sequence().charAt(i));
                 alignment2.append("-");
             }
-        } else if (n <5 || m < 5) {
-            String[] nw = runNeedlemanWunschQuadraticSpace(x, y);
-            alignment1.append(nw[0]);
-            alignment2.append(nw[1]);
+        } else if (n == 1 || m == 1) {
+            String[] nw = nw(x, y);
+            alignment1.append(nw[1]);
+            alignment2.append(nw[2]);
 
         } else {
-            int middleY = m / 2, middleX = 0;
+            boolean saveIDX = false;
+            int[][] idxMatrix = new int[n + 1][2];
+            int middleY = m / 2, middleX;
             int[][] scoreMatrix = new int[n + 1][2];
             for (int i = 0; i < n + 1; i++)
                 scoreMatrix[i][0] = -gap * i;
             for (int j = 1; j < m + 1; j++) {
+                if (j == middleY + 1) {
+                    saveIDX = true;
+                    for (int i = 0; i < n + 1; i++) {
+                        idxMatrix[i][0] = i;
+                    }
+                }
                 int previousIdx = (j + 1) % 2;
                 int currentIdx = j % 2;
                 scoreMatrix[0][currentIdx] = -gap * j;
+
                 for (int i = 1; i < n + 1; i++) {
                     int diagScore = scoreMatrix[i - 1][previousIdx] + (x.sequence().charAt(i - 1) == y.sequence().charAt(j - 1) ? match : mismatch);
-                    int leftScore = scoreMatrix[i - 1][currentIdx] - gap;
-                    int aboveScore = scoreMatrix[i][previousIdx] - gap;
+                    int aboveScore = scoreMatrix[i - 1][currentIdx] - gap;
+                    int leftScore = scoreMatrix[i][previousIdx] - gap;
                     int maxScore = Math.max(Math.max(diagScore, leftScore), aboveScore);
                     scoreMatrix[i][currentIdx] = maxScore;
-                }
-                // todo: middle point
-                if (j == middleY) {
-                    int max = scoreMatrix[n][currentIdx];
-                    for (int i = n; i >= 0; i--) {
-                        if (max < scoreMatrix[i][currentIdx]) {
-                            max = scoreMatrix[i][currentIdx];
-                            middleX = i;
-                        }
+                    if (saveIDX) {
+                        int idx = (j - middleY) % 2;
+                        idxMatrix[0][idx] = idxMatrix[0][(idx + 1) % 2];
+                        if (maxScore == diagScore)
+                            idxMatrix[i][idx] = idxMatrix[i - 1][(idx + 1) % 2];
+                        else if (maxScore == aboveScore)
+                            idxMatrix[i][idx] = idxMatrix[i - 1][idx];
+                        else if (maxScore == leftScore)
+                            idxMatrix[i][idx] = idxMatrix[i][(idx + 1) % 2];
                     }
                 }
+
             }
+            if (first)
+                System.out.println("score: " + scoreMatrix[n][m % 2]);
+            middleX = idxMatrix[n][(m - middleY) % 2];
             Pair fx = new Pair("front_x", x.sequence().substring(0, middleX));
-            System.out.println(fx.sequence());
             Pair bx = new Pair("back_x", x.sequence().substring(middleX, n));
-            System.out.println(bx.sequence());
             Pair fy = new Pair("front_y", y.sequence().substring(0, middleY));
             Pair by = new Pair("back_y", y.sequence().substring(middleY, m));
-            System.out.println("score: " + scoreMatrix[n][m % 2]);
-
-            String[] f = linearspace(fx, fy);
-            String[] b = linearspace(bx, by);
+            String[] f = linearspace(fx, fy, false);
+            String[] b = linearspace(bx, by, false);
             alignment1.append(f[0]);
             alignment1.append(b[0]);
             alignment2.append(f[1]);
             alignment2.append(b[1]);
         }
-        System.out.println(alignment1.toString() +"\n"+ alignment2.toString());
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
         return new String[]{alignment1.toString(), alignment2.toString()};
     }
 
@@ -178,13 +188,13 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
      */
     public static void runNeedlemanWunschRecursively(Pair x, Pair y) {
         // todo: implement using recursive function computeF, , Assignment 2.3
-        long start = System.currentTimeMillis();
-        int i = x.sequence().length(), j = y.sequence().length();
-        int score = computeF(i, j, x.sequence(), y.sequence());
-
-        System.out.println(score);
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
+        for (int l = 10; l <= 20; l = l + 5) {
+            long start = System.currentTimeMillis();
+            int score = computeF(l, l, x.sequence().substring(0, l), y.sequence().substring(0, l));
+            System.out.println("length: " + l + "\tscore: " + score);
+            long end = System.currentTimeMillis();
+            System.out.println("runtime: " + (end - start) + "ms");
+        }
     }
 
     public static int computeF(int i, int j, String x, String y) {
