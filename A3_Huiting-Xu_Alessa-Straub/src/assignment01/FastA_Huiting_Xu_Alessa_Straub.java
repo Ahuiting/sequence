@@ -1,9 +1,11 @@
+package assignment01;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * FastA_Huiting_Xu_Alessa_Straub
+ * asignment01.FastA_Huiting_Xu_Alessa_Straub
  * Author(s): Huiting Xu and Alessa Straub
  * Sequence Bioinformatics, WS 22/23
  */

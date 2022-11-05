@@ -1,4 +1,4 @@
-//import assignment01.FastA_YOUR_NAME;
+import assignment01.FastA_Huiting_Xu_Alessa_Straub;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,7 +24,12 @@ public class AlignmentILP_Huiting_Xu_Alessa_Straub {
 
 		try(var w=(args.length ==2?new FileWriter(args[1]):new OutputStreamWriter(System.out))) {
 			w.write("max: ");
+			System.out.println(list);
 			// 1. write the objective function: loop over all pairs of sequences and all pairs of letters
+			//for (int i = 0; i < list; i++) {
+				//System.out.println(list);
+
+			//}
 
 			// 2. write out all the simple mixed cycle constraints between any two sequences
 

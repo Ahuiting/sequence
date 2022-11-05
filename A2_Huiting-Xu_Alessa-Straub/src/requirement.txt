@@ -1,11 +1,11 @@
-import A1_Huiting_Xu_Alessa_Straub.FastA_Huiting_Xu_Alessa_Straub;
-import A1_Huiting_Xu_Alessa_Straub.FastA_Huiting_Xu_Alessa_Straub.Pair;
+import A1_Huiting_Xu_Alessa_Straub.assignment01.FastA_Huiting_Xu_Alessa_Straub;
+import A1_Huiting_Xu_Alessa_Straub.assignment01.FastA_Huiting_Xu_Alessa_Straub.Pair;
 
 how to run it:
 normal Needleman:
 
 First try:
-javac A1_Huiting_Xu_Alessa_Straub/FastA_Huiting_Xu_Alessa_Straub.java
+javac A1_Huiting_Xu_Alessa_Straub/assignment01.FastA_Huiting_Xu_Alessa_Straub.java
 short.fasta:
 Try: java GlobalAligner_Huiting_Xu_Alessa_Straub.java data-02/short.fasta
 medium.fasta:

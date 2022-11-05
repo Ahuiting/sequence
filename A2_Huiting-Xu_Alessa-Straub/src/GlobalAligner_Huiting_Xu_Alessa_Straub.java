@@ -8,6 +8,7 @@ import java.io.IOException;
  * Sequence Bioinformatics, WS 22/23
  */
 public class GlobalAligner_Huiting_Xu_Alessa_Straub {
+
     public static void main(String[] args) throws IOException {
         if (args.length < 1 || args.length > 2)
             throw new IOException("Usage: GlobalAligner_Huiting_Xu_Alessa_Straub infile [quadraticSpace|linearSpace|noDP]");
@@ -26,6 +27,7 @@ public class GlobalAligner_Huiting_Xu_Alessa_Straub {
             default -> throw new IOException("Unknown mode: " + mode);
         }
     }
+
 
     /**
      * computes the optimal global alignment score and an alignment, using quadratic space.
