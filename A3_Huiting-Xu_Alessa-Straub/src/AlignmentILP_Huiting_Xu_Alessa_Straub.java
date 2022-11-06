@@ -47,8 +47,6 @@ public class AlignmentILP_Huiting_Xu_Alessa_Straub {
             ArrayList<String> constaintsWithTwoSequence = new ArrayList();
             int[] length =new int[] {list.get(0).sequence().length(),  list.get(1).sequence().length(), list.get(2).sequence().length()};
             constaintsWithTwoSequence.addAll(CountEdgesSimpleMixedCycles_Huiting_Xu_Alessa_Straub.cycleBetweenTwoCycle(length));
-            constaintsWithTwoSequence.addAll(CountEdgesSimpleMixedCycles_Huiting_Xu_Alessa_Straub.cycleBetweenTwoCycle(length));
-            constaintsWithTwoSequence.addAll(CountEdgesSimpleMixedCycles_Huiting_Xu_Alessa_Straub.cycleBetweenTwoCycle(length));
             for (String string : constaintsWithTwoSequence) {
                 w.write("\n" + string);
             }
