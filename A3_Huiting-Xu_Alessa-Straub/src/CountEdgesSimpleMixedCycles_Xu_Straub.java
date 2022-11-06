@@ -54,7 +54,7 @@ public class CountEdgesSimpleMixedCycles_Xu_Straub {
                         for (int k = 0; k < length[second]; k++) { // start point in second sequence
                             for (int l = k; l < length[second]; l++) { // end point in second sequence
                                 if (!(i == j && k == l)) { // when i = j and k = l, it's a line not a cycle
-                                    constraints.add("X"+first + i +"_"+second+ l + "+" + "X" +first+ j +"_"+second+ k + "<1;");
+                                    constraints.add("X" + first + i + "_" + second + l + "+" + "X" + first + j + "_" + second + k + "<1;");
                                 }
                             }
                         }
@@ -75,7 +75,7 @@ public class CountEdgesSimpleMixedCycles_Xu_Straub {
                         for (int m = 0; m < length[2]; m++) {  // start point in third sequence
                             for (int n = m; n < length[2]; n++) { // end point in third sequence
                                 if (!(i == j && k == l && n == m)) { //when i = j and k = l and n = m, it's a line not a cycle
-                                    constraints.add("X0" + j + "_1" + k + "+X1" + l + "_2" + m + "+"+"X2" + n + "_0" + i + "<2;");
+                                    constraints.add("X0" + j + "_1" + k + "+X1" + l + "_2" + m + "+" + "X0" + i + "_2" + n + "<2;");
                                 }
                             }
                         }
@@ -87,7 +87,8 @@ public class CountEdgesSimpleMixedCycles_Xu_Straub {
                         for (int k = 0; k < length[1]; k++) { // start point in second sequence
                             for (int l = k; l < length[1]; l++) { // end point in second sequence
                                 if (!(i == j && k == l && n == m)) { //when n = m andi = j and k = l, it's a line not a cycle
-                                    constraints.add("X0" + j + "_2" + m + "+X2" + n + "_1" + k + "+"+"X1" + l + "_0" + i + "<2;");
+                                    constraints.add("X0" + j + "_2" + m + "+X1" + k + "_2" + n + "+" + "X0" + i + "_1" + l + "<2;");
+                                    System.out.println(j + " " + m + " " + n + " " + k + " " + l + " " + i);
                                 }
                             }
                         }
