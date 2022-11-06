@@ -45,7 +45,7 @@ public class AlignmentILP_Huiting_Xu_Alessa_Straub {
 
             // 2. write out all the simple mixed cycle constraints between any two sequences
             ArrayList<String> constaintsWithTwoSequence = new ArrayList();
-            int[] length =new int[] {list.get(0).sequence().length(),  list.get(1).sequence().length(), list.get(2).sequence().length()};
+            int[] length = new int[]{list.get(0).sequence().length(), list.get(1).sequence().length(), list.get(2).sequence().length()};
             constaintsWithTwoSequence.addAll(CountEdgesSimpleMixedCycles_Huiting_Xu_Alessa_Straub.cycleBetweenTwoCycle(length));
             for (String string : constaintsWithTwoSequence) {
                 w.write("\n" + string);
@@ -63,9 +63,10 @@ public class AlignmentILP_Huiting_Xu_Alessa_Straub {
 
             // 5. specify all variables as integers
             w.write("\nint ");
-            for (String string : constaintsBinary) {
-                w.write(string + ", ");
+            for (int i = 0; i < constaintsBinary.size() - 1; i++) {
+                w.write(constaintsBinary.get(i) + ",");
             }
+            w.write(constaintsBinary.get(constaintsBinary.size() - 1));
             w.write(";");
         }
     }
