@@ -9,10 +9,10 @@ import java.util.ArrayList;
  * setup ILP to solve multiple sequence alignment for three sequences
  * Sequence Bioinformatics, WS22/23
  */
-public class AlignmentILP_Huiting_Xu_Alessa_Straub {
+public class AlignmentILP_Xu_Straub {
     public static void main(String[] args) throws IOException {
         if (args.length != 1 && args.length != 2) {
-            throw new IOException("Usage: AlignmentILP_Huiting_Xu_Alessa_Strau input [output]");
+            throw new IOException("Usage: AlignmentILP_Xu_Straub input [output]");
         }
 
         var list = FastA_Huiting_Xu_Alessa_Straub.read(args[0]);
@@ -46,13 +46,13 @@ public class AlignmentILP_Huiting_Xu_Alessa_Straub {
             // 2. write out all the simple mixed cycle constraints between any two sequences
             ArrayList<String> constaintsWithTwoSequence = new ArrayList();
             int[] length = new int[]{list.get(0).sequence().length(), list.get(1).sequence().length(), list.get(2).sequence().length()};
-            constaintsWithTwoSequence.addAll(CountEdgesSimpleMixedCycles_Huiting_Xu_Alessa_Straub.cycleBetweenTwoCycle(length));
+            constaintsWithTwoSequence.addAll(CountEdgesSimpleMixedCycles_Xu_Straub.cycleBetweenTwoCycle(length));
             for (String string : constaintsWithTwoSequence) {
                 w.write("\n" + string);
             }
 
             // 3. write out all the simple mixed cycle constraints between any three sequences
-            ArrayList<String> constaintsWithThreeSequence = CountEdgesSimpleMixedCycles_Huiting_Xu_Alessa_Straub.cycleBetweenThreeCycle(length);
+            ArrayList<String> constaintsWithThreeSequence = CountEdgesSimpleMixedCycles_Xu_Straub.cycleBetweenThreeCycle(length);
             for (String string : constaintsWithThreeSequence) {
                 w.write("\n" + string);
             }
