@@ -38,54 +38,56 @@ public class CountEdgesSimpleMixedCycles_Huiting_Xu_Alessa_Straub {
 
         // todo: implement counting of number of simple mixed cycles
         // first compute the number of simple mixed cycles that use two cycle
-        numSimpleMixedCycles += cycleBetweenTwoCycle(length[0], length[1]).size();
-        numSimpleMixedCycles += cycleBetweenTwoCycle(length[0], length[2]).size();
-        numSimpleMixedCycles += cycleBetweenTwoCycle(length[1], length[2]).size();
+        numSimpleMixedCycles += cycleBetweenTwoCycle(length).size();
 
         // then compute and add the number of simple mixed cycles that use three cycles
-        numSimpleMixedCycles += cycleBetweenThreeCycle(length[0], length[1], length[2]).size();
+        numSimpleMixedCycles += cycleBetweenThreeCycle(length).size();
         System.out.printf("Total simple mixed cycles: %d%n", numSimpleMixedCycles);
     }
 
-    static ArrayList<String> cycleBetweenTwoCycle(int length1, int length2) {
-        ArrayList<String> constrains = new ArrayList<>();
-        for (int i = 0; i < length1; i++) { // start point in first sequence
-            for (int j = i; j < length1; j++) { //end point in second sequence
-                for (int k = 0; k < length2; k++) { // start point in second sequence
-                    for (int l = k; l < length2; l++) { // end point in second sequence
-                        if (!(i == j && k == l)) { // when i = j and k = l, it's a line not a cycle
-                            constrains.add("X_" + i + j + "+" + "X_" + k + l + "<1;");
+    static ArrayList<String> cycleBetweenTwoCycle(int[] length) {
+        ArrayList<String> constraints = new ArrayList<>();
+        for (int first = 0; first < length.length; first++) {
+            for (int second = first + 1; second < length.length; second++) {
+                for (int i = 0; i < length[first]; i++) { // start point in first sequence
+                    for (int j = i; j < length[first]; j++) { //end point in second sequence
+                        for (int k = 0; k < length[second]; k++) { // start point in second sequence
+                            for (int l = k; l < length[second]; l++) { // end point in second sequence
+                                if (!(i == j && k == l)) { // when i = j and k = l, it's a line not a cycle
+                                    constraints.add("X"+first + i +"_"+second+ l + "+" + "X" +first+ j +"_"+second+ k + "<1;");
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-        return constrains;
+        return constraints;
     }
 
-    static ArrayList<String> cycleBetweenThreeCycle(int length1, int length2, int length3) {
-        ArrayList<String> constrains = new ArrayList<>();
-        for (int i = 0; i < length1; i++) { // start point in first sequence
-            for (int j = i; j < length1; j++) {  // end point in first sequence
+    static ArrayList<String> cycleBetweenThreeCycle(int[] length) {
+        ArrayList<String> constraints = new ArrayList<>();
+        for (int i = 0; i < length[0]; i++) { // start point in first sequence
+            for (int j = i; j < length[0]; j++) {  // end point in first sequence
                 // after exiting first sequence, enter second sequence first and then third sequence.
-                for (int k = 0; k < length2; k++) {  // start point in second sequence
-                    for (int l = k; l < length2; l++) {  // end point in second sequence
-                        for (int m = 0; m < length3; m++) {  // start point in third sequence
-                            for (int n = m; n < length3; n++) { // end point in third sequence
+                for (int k = 0; k < length[1]; k++) {  // start point in second sequence
+                    for (int l = k; l < length[1]; l++) {  // end point in second sequence
+                        for (int m = 0; m < length[2]; m++) {  // start point in third sequence
+                            for (int n = m; n < length[2]; n++) { // end point in third sequence
                                 if (!(i == j && k == l && n == m)) { //when i = j and k = l and n = m, it's a line not a cycle
-                                    constrains.add("X_" + i + j + "+" + "X_" + k + l + "X_" + n + m + "<1;");
+                                    constraints.add("X0" + j + "_1" + k + "+X1" + l + "_2" + m + "+"+"X2" + n + "_0" + i + "<2;");
                                 }
                             }
                         }
                     }
                 }
                 // after exiting first sequence, enter third sequence first and then second sequence.
-                for (int m = 0; m < length3; m++) { // start point in third sequence
-                    for (int n = m; n < length3; n++) { // end point in third sequence
-                        for (int k = 0; k < length2; k++) { // start point in second sequence
-                            for (int l = k; l < length2; l++) { // end point in second sequence
+                for (int m = 0; m < length[2]; m++) { // start point in third sequence
+                    for (int n = m; n < length[2]; n++) { // end point in third sequence
+                        for (int k = 0; k < length[1]; k++) { // start point in second sequence
+                            for (int l = k; l < length[1]; l++) { // end point in second sequence
                                 if (!(i == j && k == l && n == m)) { //when n = m andi = j and k = l, it's a line not a cycle
-                                    constrains.add("X_" + i + j + "+" + "X_" + k + l + "X_" + n + m + "<1;");
+                                    constraints.add("X0" + j + "_2" + m + "+X2" + n + "_1" + k + "+"+"X1" + l + "_0" + i + "<2;");
                                 }
                             }
                         }
@@ -93,7 +95,7 @@ public class CountEdgesSimpleMixedCycles_Huiting_Xu_Alessa_Straub {
                 }
             }
         }
-        return constrains;
+        return constraints;
     }
 
 }
