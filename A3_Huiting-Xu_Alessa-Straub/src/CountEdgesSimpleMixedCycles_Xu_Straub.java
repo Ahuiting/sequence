@@ -88,7 +88,6 @@ public class CountEdgesSimpleMixedCycles_Xu_Straub {
                             for (int l = k; l < length[1]; l++) { // end point in second sequence
                                 if (!(i == j && k == l && n == m)) { //when n = m andi = j and k = l, it's a line not a cycle
                                     constraints.add("X0" + j + "_2" + m + "+X1" + k + "_2" + n + "+" + "X0" + i + "_1" + l + "<2;");
-                                    System.out.println(j + " " + m + " " + n + " " + k + " " + l + " " + i);
                                 }
                             }
                         }
