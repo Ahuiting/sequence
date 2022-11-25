@@ -54,17 +54,20 @@ public class FindQueries_YOUR_NAME {
         return b;
     }
 
-    static boolean findTry(ArrayList<NaiveSuffixTree.Node> children, String query) {
-
+    static boolean findTry(Collection<NaiveSuffixTree.Node> children, String query) {
         for (NaiveSuffixTree.Node node : children) {
             String edgeLabel = node.getLetters();
-            for (int i = 0; i < Math.min(query.length(), edgeLabel.length()); i++) {
-                if (query.charAt(i) != edgeLabel.charAt(i)) {
-                   continue;
+            if(query.length()<=edgeLabel.length()){
+                if(edgeLabel.startsWith(query)){
+                    return true;
+                }
+                else return false;
+            }
+            else {
+                if(query.startsWith(edgeLabel)){
+                    findTry(node.getChildren(),query.substring(edgeLabel.length()-1));
                 }
             }
-            findTry((ArrayList<NaiveSuffixTree.Node>) node.getChildren(), query.substring(edgeLabel.length() - 1));
-            return true;
         }
         return true;
     }
