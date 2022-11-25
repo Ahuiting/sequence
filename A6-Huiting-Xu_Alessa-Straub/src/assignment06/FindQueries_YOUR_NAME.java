@@ -11,69 +11,74 @@ import java.util.Collections;
  * FindQueries_YOUR_NAME 11.22
  */
 public class FindQueries_YOUR_NAME {
-	public static void main (String[] args) throws IOException {
-		System.out.println(FindQueries_YOUR_NAME.class.getSimpleName());
+    public static void main(String[] args) throws IOException {
+        System.out.println(FindQueries_YOUR_NAME.class.getSimpleName());
 
-		if(args.length!=2)
-			throw new IOException("Usage: FindQueries_YOUR_NAME text queries");
+        if (args.length != 2)
+            throw new IOException("Usage: FindQueries_YOUR_NAME text queries");
 
-		var textItems= assignment01.FastA_Xu_Straub.read(args[0]);
-		if(textItems.size()!=1)
-			throw new IOException("text must contain 1 sequence, found: "+textItems.size());
+        var textItems = assignment01.FastA_Xu_Straub.read(args[0]);
+        if (textItems.size() != 1)
+            throw new IOException("text must contain 1 sequence, found: " + textItems.size());
 
-		System.out.println("Text: "+textItems.get(0).sequence());
+        System.out.println("Text: " + textItems.get(0).sequence());
 
-		var suffixTree=new assignment06.NaiveSuffixTree(textItems.get(0).sequence());
+        var suffixTree = new assignment06.NaiveSuffixTree(textItems.get(0).sequence());
 
-		var queryItems= assignment01.FastA_Xu_Straub.read(args[1]);
+        var queryItems = assignment01.FastA_Xu_Straub.read(args[1]);
 
-		for(var item:queryItems) {
-			System.out.println("Query "+item.sequence());
-			System.out.println("Contained: "+contains(suffixTree,item.sequence()));
-			System.out.print("Occurrences:");
-			for(var pos:find(suffixTree,item.sequence())) {
-				System.out.print(" "+pos);
-			}
-			System.out.println();
-		}
-	}
+        for (var item : queryItems) {
+            System.out.println("Query " + item.sequence());
+            System.out.println("Contained: " + contains(suffixTree, item.sequence()));
+            System.out.print("Occurrences:");
+            for (var pos : find(suffixTree, item.sequence())) {
+                System.out.print(" " + pos);
+            }
+            System.out.println();
+        }
+    }
 
-	/**
-	 * determines whether text contains query
-	 * @param suffixTree the suffix tree representing the text
-	 * @param query the query
-	 * @return true, if query in text
-	 */
-	public static boolean contains(NaiveSuffixTree suffixTree, String query) {
-		// todo: please implement this
-		char first= query.charAt(0);
-		ArrayList<NaiveSuffixTree.Node> rootChildren=suffixTree.getChildren(suffixTree.getRoot());
+    /**
+     * determines whether text contains query
+     *
+     * @param suffixTree the suffix tree representing the text
+     * @param query      the query
+     * @return true, if query in text
+     */
+    public static boolean contains(NaiveSuffixTree suffixTree, String query) {
+        // todo: please implement this
+        String first = String.valueOf(query.charAt(0));
+        ArrayList<NaiveSuffixTree.Node> rootChildren = suffixTree.getChildren(suffixTree.getRoot());
+        boolean b = findTry(rootChildren, query);
 
-		for (NaiveSuffixTree.Node node:rootChildren) {
-			if(node.getChild(first)==null){
-				System.out.println();
-				System.out.println("not exist");
+        return b;
+    }
 
-			}
-			else{
-				System.out.println();
-				String letter =node.getChild(first).getLetters();
-				System.out.println("stringggggg"+ letter);
+    static boolean findTry(ArrayList<NaiveSuffixTree.Node> children, String query) {
+
+        for (NaiveSuffixTree.Node node : children) {
+            String edgeLabel = node.getLetters();
+            for (int i = 0; i < Math.min(query.length(), edgeLabel.length()); i++) {
+                if (query.charAt(i) != edgeLabel.charAt(i)) {
+                   continue;
+                }
+            }
+            findTry((ArrayList<NaiveSuffixTree.Node>) node.getChildren(), query.substring(edgeLabel.length() - 1));
+            return true;
+        }
+        return true;
+    }
 
 
-		}
-		}
-		return true;
-	}
-
-	/**
-	 * find and return all occurrences of query in text
-	 * @param suffixTree the suffix tree representing the text
-	 * @param query the query
-	 * @return all positions in text at which query occurs
-	 */
-	public static Collection<Integer> find(NaiveSuffixTree suffixTree, String query) {
-		// todo: please implement this
-		return Collections.emptyList();
-	}
+    /**
+     * find and return all occurrences of query in text
+     *
+     * @param suffixTree the suffix tree representing the text
+     * @param query      the query
+     * @return all positions in text at which query occurs
+     */
+    public static Collection<Integer> find(NaiveSuffixTree suffixTree, String query) {
+        // todo: please implement this
+        return Collections.emptyList();
+    }
 }
