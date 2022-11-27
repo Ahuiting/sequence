@@ -47,31 +47,29 @@ public class FindQueries_YOUR_NAME {
      */
     public static boolean contains(NaiveSuffixTree suffixTree, String query) {
         // todo: please implement this
-        String first = String.valueOf(query.charAt(0));
         ArrayList<NaiveSuffixTree.Node> rootChildren = suffixTree.getChildren(suffixTree.getRoot());
-        boolean b = findTry(rootChildren, query);
-
-        return b;
+        return checkQueryRecursive(rootChildren, query);
     }
 
-    static boolean findTry(Collection<NaiveSuffixTree.Node> children, String query) {
+    static boolean checkQueryRecursive(Collection<NaiveSuffixTree.Node> children, String query) {
+        boolean same = false;
         for (NaiveSuffixTree.Node node : children) {
             String edgeLabel = node.getLetters();
-            if(query.length()<=edgeLabel.length()){
-                if(edgeLabel.startsWith(query)){
+            if (query.length() <= edgeLabel.length()) {
+                if (edgeLabel.startsWith(query)) {
                     return true;
                 }
-                else return false;
-            }
-            else {
-                if(query.startsWith(edgeLabel)){
-                    findTry(node.getChildren(),query.substring(edgeLabel.length()-1));
+            } else {
+                if (query.startsWith(edgeLabel)) {
+                    same = checkQueryRecursive(node.getChildren(), query.substring(edgeLabel.length()));
+                    if (same) {
+                        break;
+                    }
                 }
             }
         }
-        return true;
+        return same;
     }
-
 
     /**
      * find and return all occurrences of query in text
@@ -82,6 +80,25 @@ public class FindQueries_YOUR_NAME {
      */
     public static Collection<Integer> find(NaiveSuffixTree suffixTree, String query) {
         // todo: please implement this
-        return Collections.emptyList();
+        ArrayList<NaiveSuffixTree.Node> rootChildren = suffixTree.getChildren(suffixTree.getRoot());
+        return indexQueryRecursive(rootChildren, query);
+    }
+
+    static Collection<Integer> indexQueryRecursive(Collection<NaiveSuffixTree.Node> children, String query) {
+        ArrayList<Integer> indices = new ArrayList<>();
+        for (NaiveSuffixTree.Node node : children) {
+            String edgeLabel = node.getLetters();
+            if (query.length() < edgeLabel.length()) {
+                if (edgeLabel.startsWith(query)) {
+                    indices.add(node.getSuffixPos());
+                }
+            } else {
+                if (query.startsWith(edgeLabel)) {
+                    indices.addAll(indexQueryRecursive(node.getChildren(), query.substring(edgeLabel.length())));
+                }
+            }
+        }
+        Collections.sort(indices);
+        return indices;
     }
 }
