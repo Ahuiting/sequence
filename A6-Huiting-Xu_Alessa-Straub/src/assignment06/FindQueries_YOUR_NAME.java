@@ -88,9 +88,12 @@ public class FindQueries_YOUR_NAME {
         ArrayList<Integer> indices = new ArrayList<>();
         for (NaiveSuffixTree.Node node : children) {
             String edgeLabel = node.getLetters();
-            if (query.length() < edgeLabel.length()) {
+            if (query.length() <= edgeLabel.length()) {
                 if (edgeLabel.startsWith(query)) {
-                    indices.add(node.getSuffixPos());
+                    if (node.getSuffixPos()==-1){
+                        indices.addAll(getChildrenIndices(node));
+                    }
+                    else indices.add(node.getSuffixPos());
                 }
             } else {
                 if (query.startsWith(edgeLabel)) {
@@ -99,6 +102,16 @@ public class FindQueries_YOUR_NAME {
             }
         }
         Collections.sort(indices);
+        return indices;
+    }
+    static Collection<Integer> getChildrenIndices(NaiveSuffixTree.Node node){
+        ArrayList<Integer> indices = new ArrayList<>();
+        for (NaiveSuffixTree.Node child:node.getChildren()){
+            if (child.getSuffixPos()==-1){
+                indices.addAll(getChildrenIndices(child));
+            }
+            else indices.add(child.getSuffixPos());
+        }
         return indices;
     }
 }
