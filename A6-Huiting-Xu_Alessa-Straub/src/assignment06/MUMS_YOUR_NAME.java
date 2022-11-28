@@ -1,9 +1,7 @@
 package assignment06;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * computes all MUMs in a text
@@ -25,33 +23,57 @@ public class MUMS_YOUR_NAME {
         // todo: please implement
 
         // 1. setup suffix tree for appropriately concatenated sequences
-        var text = textItems.get(0).sequence().substring(0, textItems.get(0).sequence().length() - 1) + "%"
-                + textItems.get(1).sequence();
+        var text = textItems.get(0).sequence() + "%" + textItems.get(1).sequence();
         var suffixTree = new assignment06.NaiveSuffixTree(text);
         // 2. implement algorithm to report all MUMs (of any size)
+        HashMap<String, ArrayList> map = recursive(suffixTree.getRoot(), "");
+        ArrayList list= new ArrayList<>(map.keySet());
+        for (String k1 : map.keySet()) {
+            for (String k2 : map.keySet()) {
+                if (k1 != k2) {
+                    if (k1.contains(k2)) {
+                        list.remove(k2);
+                    }
+                    if (k2.contains(k1)) {
+                        list.remove(k1);
+                    }
+                }
 
-        System.out.println(recursive(suffixTree.getRoot()));
+            }
+        }
+        System.out.println(list);
+        /*Collections.sort(list);
+        int start1 = list.get(0) + 1;
+        int start2 = list.get(1) - textItems.get(0).sequence().length() - 1 + 1;
+        System.out.println(start1 + " and " + start2);
+        System.out.println("for input " + textItems.get(0).sequence() + " and " + textItems.get(1).sequence());*/
+
         // output should be:
         // MUM "GC" at 2 and 2 (1-based)
         // for input AGCT and GGCC
     }
 
-    static ArrayList recursive(NaiveSuffixTree.Node node) {
-        ArrayList arrayList = new ArrayList();
+    static HashMap recursive(NaiveSuffixTree.Node node, String s) {
+        HashMap<String, ArrayList> map = new HashMap();
         List<NaiveSuffixTree.Node> nodeArrayList = new ArrayList(List.of(node.getChildren().toArray()));
-        if (nodeArrayList.size() == 2 && nodeArrayList.get(0).getChildren().size() == 0 && nodeArrayList.get(1).getChildren().size() == 0) {
-            if (nodeArrayList.get(0).getLetters().contains("%") && nodeArrayList.get(0).getLetters().contains("%")) {
-                return new ArrayList();
-            } else {
-                arrayList.add(nodeArrayList.get(0).getSuffixPos());
-                arrayList.add(nodeArrayList.get(1).getSuffixPos());
+        if (nodeArrayList.size() == 2 && nodeArrayList.get(0).getChildren().isEmpty() && nodeArrayList.get(1).getChildren().isEmpty()) {
+            if ((nodeArrayList.get(0).getLetters().contains("%") && (!nodeArrayList.get(1).getLetters().contains("%")))
+            ||(!nodeArrayList.get(0).getLetters().contains("%")) && nodeArrayList.get(1).getLetters().contains("%")) {
+                map.put(s + node.getLetters(), new ArrayList<>() {{
+                    add(nodeArrayList.get(0).getSuffixPos());
+                    add(nodeArrayList.get(1).getSuffixPos());
+                }});
             }
 
         } else {
             for (NaiveSuffixTree.Node child : node.getChildren()) {
-                arrayList.addAll(recursive(child));
+                String s1 = s + node.getLetters();
+                HashMap<String, ArrayList> hashMap = recursive(child, s1);
+                for (String k : hashMap.keySet()) {
+                    map.put(k, hashMap.get(k));
+                }
             }
         }
-        return arrayList;
+        return map;
     }
 }
