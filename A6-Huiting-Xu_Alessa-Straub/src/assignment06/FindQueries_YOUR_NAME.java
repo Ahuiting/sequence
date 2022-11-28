@@ -32,7 +32,7 @@ public class FindQueries_YOUR_NAME {
             System.out.println("Contained: " + contains(suffixTree, item.sequence()));
             System.out.print("Occurrences:");
             for (var pos : find(suffixTree, item.sequence())) {
-                System.out.print(" " + pos);
+                System.out.print(" start" + pos+" end:"+(pos+item.sequence().length()-1));
             }
             System.out.println();
         }
