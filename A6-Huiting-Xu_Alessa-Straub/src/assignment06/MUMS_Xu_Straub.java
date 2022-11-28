@@ -8,10 +8,10 @@ import java.util.*;
  * Sequence Bioinformatics, WS 22/23
  * MUMS_YOUR_NAME, 11.22
  */
-public class MUMS_YOUR_NAME {
+public class MUMS_Xu_Straub {
 
     public static void main(String[] args) throws IOException {
-        System.out.println(MUMS_YOUR_NAME.class.getSimpleName());
+        System.out.println(MUMS_Xu_Straub.class.getSimpleName());
 
         if (args.length != 1)
             throw new IOException("Usage: MUMS_YOUR_NAME fasta-file");

@@ -10,9 +10,9 @@ import java.util.Collections;
  * Sequence Bioinformatics, WS 22/23
  * FindQueries_YOUR_NAME 11.22
  */
-public class FindQueries_YOUR_NAME {
+public class FindQueries_Xu_Straub {
     public static void main(String[] args) throws IOException {
-        System.out.println(FindQueries_YOUR_NAME.class.getSimpleName());
+        System.out.println(FindQueries_Xu_Straub.class.getSimpleName());
 
         if (args.length != 2)
             throw new IOException("Usage: FindQueries_YOUR_NAME text queries");
