@@ -32,7 +32,7 @@ public class FindQueries_YOUR_NAME {
             System.out.println("Contained: " + contains(suffixTree, item.sequence()));
             System.out.print("Occurrences:");
             for (var pos : find(suffixTree, item.sequence())) {
-                System.out.print(" start" + pos+" end:"+(pos+item.sequence().length()-1));
+                System.out.print(" " + pos);
             }
             System.out.println();
         }
@@ -90,10 +90,7 @@ public class FindQueries_YOUR_NAME {
             String edgeLabel = node.getLetters();
             if (query.length() <= edgeLabel.length()) {
                 if (edgeLabel.startsWith(query)) {
-                    if (node.getSuffixPos()==-1){
-                        indices.addAll(getChildrenIndices(node));
-                    }
-                    else indices.add(node.getSuffixPos());
+                    indices.addAll(getChildrenIndices(node));
                 }
             } else {
                 if (query.startsWith(edgeLabel)) {
@@ -104,13 +101,15 @@ public class FindQueries_YOUR_NAME {
         Collections.sort(indices);
         return indices;
     }
-    static Collection<Integer> getChildrenIndices(NaiveSuffixTree.Node node){
+
+    static Collection<Integer> getChildrenIndices(NaiveSuffixTree.Node node) {
         ArrayList<Integer> indices = new ArrayList<>();
-        for (NaiveSuffixTree.Node child:node.getChildren()){
-            if (child.getSuffixPos()==-1){
+        if (node.getChildren().isEmpty()) {
+            indices.add(node.getSuffixPos());
+        } else {
+            for (NaiveSuffixTree.Node child : node.getChildren()) {
                 indices.addAll(getChildrenIndices(child));
             }
-            else indices.add(child.getSuffixPos());
         }
         return indices;
     }
