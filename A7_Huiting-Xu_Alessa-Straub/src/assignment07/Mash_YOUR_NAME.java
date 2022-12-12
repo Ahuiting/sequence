@@ -136,8 +136,18 @@ public class Mash_YOUR_NAME {
      * @return Jaccard index
      */
     public static double computeJaccardIndex(int s, SortedSet<Integer> sketchA, SortedSet<Integer> sketchB) {
+        final SortedSet<Integer> mergedSet = new TreeSet<>();
+        final SortedSet<Integer> set = sketchA;
+        mergedSet.addAll(sketchA);
+        mergedSet.addAll(sketchB);
+        while (mergedSet.size() > s) mergedSet.remove(mergedSet.last());
+        set.retainAll(sketchB);
+        set.retainAll(mergedSet);
+        double denominator = set.size();
+        double nominator = s;
+        double jaccard = denominator/nominator;
         // todo: please implement
-        return 0.0;
+        return jaccard;
     }
 
     /**
@@ -149,7 +159,8 @@ public class Mash_YOUR_NAME {
      */
     public static double computeMashDistance(int k, double jaccardIJ) {
         // todo: please implement
-        return 0.0;
+        double mash = (Math.log((jaccardIJ*2)/(1+jaccardIJ)))*-1/k;
+        return mash;
     }
 
     // Code for reading FastA, please don't change anything below here
