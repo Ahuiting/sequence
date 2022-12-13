@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * Sequence Bioinformatics, WS 22/23
  * Mash_YOUR_NAME
  */
-public class Mash_YOUR_NAME {
+public class Mash_xu_straub {
     public static void main(String[] args) throws IOException {
         if (args.length != 3)
             throw new IOException("Usage: Mash_YOUR_NAME k s directory-of-input-files");
@@ -81,31 +81,34 @@ public class Mash_YOUR_NAME {
      * Use String method substring() to extract k-mer and hashCode() to compute k-mer hash value
      * Implement the method computeReverseComplement() to compute the reverse complement of a k-mer
      *
-     * @param k
-     * @param s
-     * @param genome
-     * @return sketch
+     * @param k kmer size
+     * @param s sketch size
+     * @param genome String with DNA Sequence
+     * @return sketch  of size s with s smallest hash values
      */
-    public static SortedSet<Integer> computeSketch(int k, int s, String genome) {
+    public static SortedSet<Integer> computeSketch(int k, int s, String genome) { // sketch is computed with given pseudocode in lecture
+        genome = genome.replaceAll("N",""); // deleted all N because it does not give as any information just sequencing error
         final SortedSet<Integer> sketch = new TreeSet<>();
-        for (int i = 0; i <= genome.length()-k; i++) { ///////////////////////////////////////////////////// sometimes smaller window why?
-            String kmer = genome.substring(i,i+k);
-            String comp = computeReverseComplement(kmer);
-            if (comp.compareTo( kmer)<0){kmer = comp;}     //////////////////////compare lexicographycly compareTo returns positive value if first string bigger then last
-            Integer kmer_hash = kmer.hashCode();
-            sketch.add(kmer_hash);
+        for (int i = 0; i <= genome.length()-k; i++) {
+            String kmer = genome.substring(i,i+k);   //kmer
+            String comp = computeReverseComplement(kmer); //kmer of reverse complement
+            if (comp.compareTo( kmer)<0){kmer = comp;}     //compares lexicographicly,  compareTo returns positive value if first string bigger then last
+            Integer kmer_hash = kmer.hashCode();   // take lexicographicly smaller
+            if (sketch.isEmpty()||kmer_hash < sketch.last() || sketch.size()< s){   //if kmer hash is smaller then biggest hash or sketch is to small add value
+                sketch.add(kmer_hash);
+                if (sketch.size() >s){ sketch.remove(sketch.last());}
         }
-        while (sketch.size() >s) sketch.remove(sketch.last());
+        }
         // todo: please implement
-        //System.out.println(sketch);
         return sketch;
+
     }
 
     /**
      * gets the reverse compliment of a sequence
      *
-     * @param dna
-     * @return reverse complement
+     * @param dna given sequence N are already deleted and it is in upper case
+     * @return reverse complement The complement of the given dna sequence in reverse order. A,T,G,C and gaps are considered different letters are deleted
      */
     public static String computeReverseComplement(String dna) {
         final StringBuilder buf = new StringBuilder();
@@ -116,7 +119,7 @@ public class Mash_YOUR_NAME {
             else if(c =='G') {  buf.append('C');}
             else if(c =='C') {  buf.append('G');}
             else if(c =='-') {  buf.append('-');}
-            else buf.append('N');}
+            else buf.append("");}
 
 
 
@@ -130,22 +133,23 @@ public class Mash_YOUR_NAME {
     /**
      * compute the Jaccard index for two sketches
      *
-     * @param s
-     * @param sketchA
-     * @param sketchB
-     * @return Jaccard index
+     * @param s sketch size
+     * @param sketchA sketch of A in size s
+     * @param sketchB sketch of B in size s
+     * @return jaccard Jaccard index
      */
     public static double computeJaccardIndex(int s, SortedSet<Integer> sketchA, SortedSet<Integer> sketchB) {
         final SortedSet<Integer> mergedSet = new TreeSet<>();
-        final SortedSet<Integer> set = sketchA;
+        final SortedSet<Integer> set = new TreeSet<>(sketchA);
         mergedSet.addAll(sketchA);
+
         mergedSet.addAll(sketchB);
-        while (mergedSet.size() > s) mergedSet.remove(mergedSet.last());
+        while (mergedSet.size() > s) mergedSet.remove(mergedSet.last());  // Union has to be size s see picture 3 in report
         set.retainAll(sketchB);
-        set.retainAll(mergedSet);
+        set.retainAll(mergedSet);  // set retains now the intersection of (setA setB and the union size s of both)
         double denominator = set.size();
         double nominator = s;
-        double jaccard = denominator/nominator;
+        double jaccard = denominator/nominator; // number of values in intersection divided by size of union
         // todo: please implement
         return jaccard;
     }
@@ -153,13 +157,13 @@ public class Mash_YOUR_NAME {
     /**
      * computes the mash distance from the Jaccard index
      *
-     * @param k
-     * @param jaccardIJ
+     * @param k kmer size
+     * @param jaccardIJ  jaccard index
      * @return mash distance
      */
     public static double computeMashDistance(int k, double jaccardIJ) {
         // todo: please implement
-        double mash = (Math.log((jaccardIJ*2)/(1+jaccardIJ)))*-1/k;
+        double mash = (Math.log((jaccardIJ*2.0)/(1.0+jaccardIJ)))*(-1.0/k);
         return mash;
     }
 
