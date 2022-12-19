@@ -174,8 +174,18 @@ public class Minimap_YOUR_NAME {
 	 */
 	public static HashMap<Integer,Set<Location>> computeTargetIndex(ArrayList<FastA_Huiting_Xu_Alessa_Straub.Pair> targets, int w, int k) {
 		var targetIndex= new HashMap<Integer,Set<Location>>();
+		for (int i = 0; i < targets.size(); i++) {
+			System.out.println(targets.get(i));
+			var help = targets.get(i);
+			String s = help.sequence();
+			var M =new HashSet<Minimizer>(minimizerSketch(s, w,k));
+			for ( Minimizer element :M
+				 ) { Set<Location> mutableSet = new HashSet<>();
+					mutableSet.add(new Location(i,element.pos, element.r));
+				targetIndex.put(element.h,mutableSet);
 
-		// todo: implement computation of target index as described in script (algorithm 1)
+			}
+		}
 
 		return targetIndex;
 	}
