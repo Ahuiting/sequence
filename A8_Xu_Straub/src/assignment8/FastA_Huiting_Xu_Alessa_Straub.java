@@ -41,6 +41,7 @@ public class FastA_Huiting_Xu_Alessa_Straub {
             }
         }
         return list;
+
     }
 
     /**
