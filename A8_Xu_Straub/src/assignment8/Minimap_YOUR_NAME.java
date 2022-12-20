@@ -1,10 +1,7 @@
 package assignment8;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * proof-of-concept implementation for the basic minimap algorithm
@@ -175,7 +172,6 @@ public class Minimap_YOUR_NAME {
 	public static HashMap<Integer,Set<Location>> computeTargetIndex(ArrayList<FastA_Huiting_Xu_Alessa_Straub.Pair> targets, int w, int k) {
 		var targetIndex= new HashMap<Integer,Set<Location>>();
 		for (int i = 0; i < targets.size(); i++) {
-			System.out.println(targets.get(i));
 			var help = targets.get(i);
 			String s = help.sequence();
 			var M =new HashSet<Minimizer>(minimizerSketch(s, w,k));
@@ -202,8 +198,22 @@ public class Minimap_YOUR_NAME {
 
 		// compute array of k-mer hits:
 		var A=new ArrayList<KMerHit>();
+		var M =new HashSet<Minimizer>(minimizerSketch(query, w,k));
+		for ( Minimizer element :M
+		) {
+			for (  Location value : targetIndex.get(element.h)
+			) {
+				if (element.r == value.r){
+					A.add(new KMerHit(value.t,0,element.pos -value.pos,value.pos));
+				}
+				else{
+					A.add(new KMerHit(value.t,1,element.pos +value.pos,value.pos));
+				}
 
-		// todo: compute array of k-mer hits (as described in script, algorithm 4, part 1)
+
+			}
+
+			}
 
 		A.sort(KMerHit::compareTo);
 
@@ -211,6 +221,13 @@ public class Minimap_YOUR_NAME {
 		var result=new ArrayList<Match>();
 		var b=0;
 		for(var e=0;e<A.size();e++) {
+			if (e == A.size()-1 || A.get(e).t !=A.get(e+1).t ||A.get(e).r !=A.get(e+1).r || A.get(e+1).c - A.get(e).c>= epsilon ){
+				// todo: part with C and Matches report
+				// A.get(b);
+				//A.get(e);
+				//new Match(A.t,r,)
+				b = e+1;
+			}
 			// todo: compute matches or ``clusters'' (as described in script, algorithm 4, part;s 2 and 3
 		}
 		return result;
