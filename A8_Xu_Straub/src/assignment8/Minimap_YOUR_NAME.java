@@ -239,8 +239,8 @@ public class Minimap_YOUR_NAME {
 					maxPositionQuery = Math.max(position,maxPositionQuery);
 
 				}
-				minPositionQuery = minPositionQuery+k;
-				minPositionTarget = minPositionTarget +k;
+				maxPositionQuery = maxPositionQuery+k;
+				maxPositionTarget = maxPositionTarget +k;
 				result.add(new Match(A.get(e).t,A.get(e).r,minPositionQuery,maxPositionQuery,minPositionTarget,maxPositionTarget));
 				b = e+1;
 			}
