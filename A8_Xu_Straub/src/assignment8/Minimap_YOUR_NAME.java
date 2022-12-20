@@ -87,7 +87,6 @@ public class Minimap_YOUR_NAME {
 				else if(c =='-') {  buf.append('-');}
 				else if(c =='N') {  buf.append('N');}
 				else buf.append("");}
-
 			return buf.toString();
 		}
 	}
@@ -128,14 +127,16 @@ public class Minimap_YOUR_NAME {
 	 * @return sorted set of all minimizers
 	 */
 	public static Set<Minimizer> minimizerSketch(String s, int w, int k) {
+		System.out.println("Geht in minimizer Sketch ");
 		var sketch=new HashSet<Minimizer>();
 
 		// todo: implement computation of minimizer sketch as described in script (algorithm 1)
+		if(s.length()>=w+k+1){
 		for (int i = 1; i <= s.length()-w-k+1 ; i++) {
 			int m = 1000000000;
 			for (int j = 0; j < w; j++) {
-				String uString = sk(s.substring(i+j,i+j+k),i+j,k,0);
-				String vString = sk(s.substring(i+j,i+j+k),i+j,k,1);
+				String uString = sk(s,i+j,k,0);
+				String vString = sk(s,i+j,k,1);
 				int u = h(uString);
 				int v = h(vString);
 				if (u!=v){
@@ -145,8 +146,8 @@ public class Minimap_YOUR_NAME {
 
 			}
 			for (int j = 0; j < w; j++) {
-				String uString = sk(s.substring(i+j,i+j+k),i+j,k,0);
-				String vString = sk(s.substring(i+j,i+j+k),i+j,k,1);
+				String uString = sk(s,i+j,k,0);
+				String vString = sk(s,i+j,k,1);
 				int u = h(uString);
 				int v = h(vString);
 				if (u<v & u==m){
@@ -158,7 +159,7 @@ public class Minimap_YOUR_NAME {
 
 
 			}
-		}
+		}}
 		return sketch;
 	}
 
@@ -170,6 +171,7 @@ public class Minimap_YOUR_NAME {
 	 * @return the
 	 */
 	public static HashMap<Integer,Set<Location>> computeTargetIndex(ArrayList<FastA_Huiting_Xu_Alessa_Straub.Pair> targets, int w, int k) {
+		System.out.println("Geht in compute Target Index ");
 		var targetIndex= new HashMap<Integer,Set<Location>>();
 		for (int i = 0; i < targets.size(); i++) {
 			var help = targets.get(i);
@@ -182,7 +184,7 @@ public class Minimap_YOUR_NAME {
 
 			}
 		}
-
+		System.out.println(targetIndex);
 		return targetIndex;
 	}
 
@@ -201,7 +203,7 @@ public class Minimap_YOUR_NAME {
 		var M =new HashSet<Minimizer>(minimizerSketch(query, w,k));
 		for ( Minimizer element :M
 		) {
-			for (  Location value : targetIndex.get(element.h)
+			for (Location value : targetIndex.get(element.h)
 			) {
 				if (element.r == value.r){
 					A.add(new KMerHit(value.t,0,element.pos -value.pos,value.pos));
@@ -223,9 +225,27 @@ public class Minimap_YOUR_NAME {
 		for(var e=0;e<A.size();e++) {
 			if (e == A.size()-1 || A.get(e).t !=A.get(e+1).t ||A.get(e).r !=A.get(e+1).r || A.get(e+1).c - A.get(e).c>= epsilon ){
 				// todo: part with C and Matches report
-				// A.get(b);
-				//A.get(e);
-				//new Match(A.t,r,)
+				var minPositionTarget = 1000000000;
+				var minPositionQuery = 1000000000;
+				var maxPositionTarget = -100000;
+				var maxPositionQuery = -100000;
+				int position = 0;
+				for(var f=b;f<=e;f++) {
+					if(A.get(f).r ==0){
+						position = A.get(f).c + A.get(f).pos;
+					} else if (A.get(f).r==1) {
+						position = A.get(f).c - A.get(f).pos;
+
+					}
+					minPositionTarget= Math.min(A.get(f).pos,minPositionTarget);
+					minPositionQuery = Math.min(position,minPositionQuery);
+					maxPositionTarget= Math.max(A.get(f).pos,maxPositionTarget);
+					maxPositionQuery = Math.max(position,maxPositionQuery);
+
+				}
+				minPositionQuery = minPositionQuery+k;
+				minPositionTarget = minPositionTarget +k;
+				result.add(new Match(A.get(e).t,A.get(e).r,minPositionQuery,maxPositionQuery,minPositionTarget,minPositionQuery));
 				b = e+1;
 			}
 			// todo: compute matches or ``clusters'' (as described in script, algorithm 4, part;s 2 and 3
@@ -291,5 +311,6 @@ public class Minimap_YOUR_NAME {
 	 */
 	public static record Match(int t, int r, int qMin, int qMax, int tMin, int tMax) {
 	}
+
 }
 
