@@ -161,7 +161,6 @@ public class Minimap_YOUR_NAME {
 			}
 		}
 		}
-		System.out.println(sketch);
 		return sketch;
 	}
 
@@ -175,13 +174,12 @@ public class Minimap_YOUR_NAME {
 	public static HashMap<Integer,Set<Location>> computeTargetIndex(ArrayList<FastA_Huiting_Xu_Alessa_Straub.Pair> targets, int w, int k) {
 		var targetIndex= new HashMap<Integer,Set<Location>>();
 		for (int i = 0; i < targets.size(); i++) {
-			var help = targets.get(i);
-			String s = help.sequence();
-			var M =new HashSet<Minimizer>(minimizerSketch(s, w,k));
+			String s = targets.get(i).sequence();
+			var M =minimizerSketch(s, w,k);
 			for ( Minimizer element :M
-				 ) { Set<Location> mutableSet = new HashSet<>();
+				 ) { Set mutableSet = new HashSet<Location>();
 					mutableSet.add(new Location(i,element.pos, element.r));
-				targetIndex.put(element.h,mutableSet);
+					targetIndex.put(element.h,mutableSet);
 
 			}
 		}
