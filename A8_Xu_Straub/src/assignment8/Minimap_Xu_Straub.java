@@ -8,7 +8,7 @@ import java.util.*;
  * Sequence Bioinformatics, WS 22/23
  * Minimap_YOUR_NAME, 12.22
  */
-public class Minimap_YOUR_NAME {
+public class Minimap_Xu_Straub {
 	/**
 	 * run the basic minimap algorithm
 	 * @param args commandline arguments
@@ -45,7 +45,7 @@ public class Minimap_YOUR_NAME {
 				throw new RuntimeException("Hashing reverse-complement broken, expected 91, got: "+hashReverseComplement);
 		}
 
-		System.err.printf(Minimap_YOUR_NAME.class.getSimpleName() + " w=%d k=%d targets=%d queries=%d%n", w,k,targets.size(),queries.size());
+		System.err.printf(Minimap_Xu_Straub.class.getSimpleName() + " w=%d k=%d targets=%d queries=%d%n", w,k,targets.size(),queries.size());
 
 		var targetIndex=computeTargetIndex(targets,w,k);
 
