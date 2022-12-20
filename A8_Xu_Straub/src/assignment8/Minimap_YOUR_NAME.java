@@ -86,7 +86,8 @@ public class Minimap_YOUR_NAME {
 				else if(c =='C') {  buf.append('G');}
 				else if(c =='-') {  buf.append('-');}
 				else if(c =='N') {  buf.append('N');}
-				else buf.append("");}
+				else buf.append("");
+			}
 			return buf.toString();
 		}
 	}
@@ -127,39 +128,40 @@ public class Minimap_YOUR_NAME {
 	 * @return sorted set of all minimizers
 	 */
 	public static Set<Minimizer> minimizerSketch(String s, int w, int k) {
-		System.out.println("Geht in minimizer Sketch ");
 		var sketch=new HashSet<Minimizer>();
 
 		// todo: implement computation of minimizer sketch as described in script (algorithm 1)
 		if(s.length()>=w+k+1){
-		for (int i = 1; i <= s.length()-w-k+1 ; i++) {
-			int m = 1000000000;
-			for (int j = 0; j < w; j++) {
-				String uString = sk(s,i+j,k,0);
-				String vString = sk(s,i+j,k,1);
-				int u = h(uString);
-				int v = h(vString);
-				if (u!=v){
-					m = Math.min(m,Math.min(u,v));
+			for (int i = 1; i <= s.length()-w-k+1 ; i++) {
+				int m = 1000000000;
+				for (int j = 0; j < w; j++) {
+					String uString = sk(s,i+j,k,0);
+					String vString = sk(s,i+j,k,1);
+					int u = h(uString);
+					int v = h(vString);
+					if (u!=v){
+						m = Math.min(m,Math.min(u,v));
+					}
+
+
 				}
+				for (int j = 0; j < w; j++) {
+					String uString = sk(s,i+j,k,0);
+					String vString = sk(s,i+j,k,1);
+					int u = h(uString);
+					int v = h(vString);
+					if (u<v && u==m){
+						sketch.add(new Minimizer(m,i+j,0));
+					} else if (v<u && v==m) {
+						sketch.add(new Minimizer(m,i+j,1));
+
+					}
 
 
 			}
-			for (int j = 0; j < w; j++) {
-				String uString = sk(s,i+j,k,0);
-				String vString = sk(s,i+j,k,1);
-				int u = h(uString);
-				int v = h(vString);
-				if (u<v & u==m){
-					sketch.add(new Minimizer(m,i+j,0));
-				} else if (u<v & v==m) {
-					sketch.add(new Minimizer(m,i+j,1));
-
-				}
-
-
-			}
-		}}
+		}
+		}
+		System.out.println(sketch);
 		return sketch;
 	}
 
@@ -171,7 +173,6 @@ public class Minimap_YOUR_NAME {
 	 * @return the
 	 */
 	public static HashMap<Integer,Set<Location>> computeTargetIndex(ArrayList<FastA_Huiting_Xu_Alessa_Straub.Pair> targets, int w, int k) {
-		System.out.println("Geht in compute Target Index ");
 		var targetIndex= new HashMap<Integer,Set<Location>>();
 		for (int i = 0; i < targets.size(); i++) {
 			var help = targets.get(i);
@@ -184,7 +185,6 @@ public class Minimap_YOUR_NAME {
 
 			}
 		}
-		System.out.println(targetIndex);
 		return targetIndex;
 	}
 
@@ -211,8 +211,6 @@ public class Minimap_YOUR_NAME {
 				else{
 					A.add(new KMerHit(value.t,1,element.pos +value.pos,value.pos));
 				}
-
-
 			}
 
 			}
@@ -245,7 +243,7 @@ public class Minimap_YOUR_NAME {
 				}
 				minPositionQuery = minPositionQuery+k;
 				minPositionTarget = minPositionTarget +k;
-				result.add(new Match(A.get(e).t,A.get(e).r,minPositionQuery,maxPositionQuery,minPositionTarget,minPositionQuery));
+				result.add(new Match(A.get(e).t,A.get(e).r,minPositionQuery,maxPositionQuery,minPositionTarget,maxPositionTarget));
 				b = e+1;
 			}
 			// todo: compute matches or ``clusters'' (as described in script, algorithm 4, part;s 2 and 3
